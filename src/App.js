@@ -5,7 +5,7 @@ import EditorComponent from './component/Editor';
 import SwitchComponent from './component/Switch'
 import TableComponent from './component/Table';
 import token from './variable/token';
-import { frameApi, offsetsApi } from './variable/api-link';
+import { frameApi } from './variable/api-link';
 
 import "./App.css"
 
@@ -35,7 +35,7 @@ function App() {
   const [data, setData] = useState([]);
   const [columns, setColumns] = useState([]);
 
-  const [textUpdated, setTextUpdated] = useState("");
+  // const [textUpdated, setTextUpdated] = useState("");
 
   const [value, setValue] = useState(RichTextEditor.createValueFromString(initialText, 'html'));
   const [regexValue, setRegexValue] = useState(RichTextEditor.createValueFromString(initialRegex, 'markdown'));
