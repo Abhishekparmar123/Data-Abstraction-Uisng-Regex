@@ -52,38 +52,38 @@ function App() {
   //     }
   //   ],[]
   // );
-  const fetchOffsetsApi = useCallback( async (text, regex, apiLink) =>{
-    try{
-      const response = await fetch(apiLink,{
-        method:'POST',
-        body: JSON.stringify({
-          "flags": {multiline:1},
-          "regex": regex,
-          "text": text
-       }),
-        headers:{
-          'Authorization': `Bearer ${token}` ,
-          'Content-Type': 'application/json'
-        }
-      });
-      const result = await response.json();
-      const matches = result.result.matches;
-      console.log(result.result.matches)
-      let updatedText = text;
-      for(let i = matches.length-1; i>=0; i--){
-        const [word, start, end] = matches[i].match;
-        console.log(matches[i])
-        updatedText = updatedText.replace(updatedText.slice(start, end), `<div className="has-background-info">${updatedText.slice(start, end)}</div>`)
+  // const fetchOffsetsApi = useCallback( async (text, regex, apiLink) =>{
+  //   try{
+  //     const response = await fetch(apiLink,{
+  //       method:'POST',
+  //       body: JSON.stringify({
+  //         "flags": {multiline:1},
+  //         "regex": regex,
+  //         "text": text
+  //      }),
+  //       headers:{
+  //         'Authorization': `Bearer ${token}` ,
+  //         'Content-Type': 'application/json'
+  //       }
+  //     });
+  //     const result = await response.json();
+  //     const matches = result.result.matches;
+  //     console.log(result.result.matches)
+  //     let updatedText = text;
+  //     for(let i = matches.length-1; i>=0; i--){
+  //       const [word, start, end] = matches[i].match;
+  //       console.log(matches[i], word)
+  //       updatedText = updatedText.replace(updatedText.slice(start, end), `<div className="has-background-info">${updatedText.slice(start, end)}</div>`)
         
-      }
-      updatedText.replace(/\n/g, )
-      console.log(updatedText)
-      setTextUpdated(updatedText)
+  //     }
+  //     updatedText.replace(/\n/g, )
+  //     console.log(updatedText)
+  //     setTextUpdated(updatedText)
 
-    }catch(error){
-      console.log(error);
-    }
-  }, [])
+  //   }catch(error){
+  //     console.log(error);
+  //   }
+  // }, [])
 
 
 
@@ -139,12 +139,17 @@ function App() {
 
   useEffect(()=>{
     const text = value.toString('markdown');
-    const regex = HtmlTOText()
+    let htmlText = regexValue.toString('html')
+    htmlText = htmlText.replace('<p>', '')
+    htmlText = htmlText.replace('</p>', '')
+    htmlText = htmlText.replace(/&lt;/g, '<')
+    htmlText = htmlText.replace(/&gt;/g, '>')
+    htmlText = htmlText.replace(/&nbsp;/g, '')
 
     const identifier = setTimeout(() =>{
       console.log("fetch data")
-      fetchApiData(text, regex, frameApi)
-      fetchOffsetsApi(text, regex, offsetsApi)
+      fetchApiData(text, htmlText, frameApi)
+      // fetchOffsetsApi(text, regex, offsetsApi)
      
     }, 500);
 
@@ -152,24 +157,12 @@ function App() {
       console.log("CLEANUP")
       clearTimeout(identifier)
     }
-  },[value, regexValue])
+  },[value, regexValue, fetchApiData])
 
   
-
-  function HtmlTOText(){
-    let htmlText = regexValue.toString('html')
-    htmlText = htmlText.replace('<p>', '')
-    htmlText = htmlText.replace('</p>', '')
-    htmlText = htmlText.replace(/&lt;/g, '<')
-    htmlText = htmlText.replace(/&gt;/g, '>')
-    htmlText = htmlText.replace(/&nbsp;/g, '')
-    return htmlText
-  }
-
   console.log(checkedText)
   console.log(value.toString('markdown'))
-  const text = HtmlTOText()
-  console.log(text)
+
   return (
     <>
       <section className="hero is-link">
