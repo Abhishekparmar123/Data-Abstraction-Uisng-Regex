@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import {useFilters, useTable, usePagination} from "react-table"
 
 function TableComponent({ text, columns, data }) {
-  const headerValue = columns.length > 0 ? columns[0].Header : ''
   const {
     getTableProps, // table props from react-table
     getTableBodyProps, // table body props from react-table
